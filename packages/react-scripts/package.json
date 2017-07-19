@@ -1,7 +1,7 @@
 {
-  "name": "bhp-react-scripts",
+  "name": "bhp-antd-react-scripts",
   "version": "1.0.10",
-  "description": "BHP Custom Configuration and scripts for Create React App.",
+  "description": "BHP Ant Design Custom Configuration and scripts for Create React App.",
   "repository": "Leong21/create-react-app",
   "license": "BSD-3-Clause",
   "engines": {
