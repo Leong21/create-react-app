@@ -21,7 +21,10 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
-
+const lessToJs = require('less-vars-to-js');
+const fs = require('fs');
+const themeVariables = lessToJs(fs.readFileSync(path.resolve('./src/bhp-antd-theme.less'), 'utf8'));
+console.log(themeVariables);
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
@@ -148,7 +151,7 @@ module.exports = {
             loader: require.resolve('eslint-loader'),
           },
         ],
-        include: paths.appSrc,
+        include: paths.appSrc,        
       },
       {
         // "oneOf" will traverse all following loaders until one will
@@ -175,6 +178,9 @@ module.exports = {
               // @remove-on-eject-begin
               babelrc: false,
               presets: [require.resolve('babel-preset-react-app')],
+              plugins: [
+                ['import', [{ libraryName: 'antd', style: true }]],
+              ],
               // @remove-on-eject-end
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -218,6 +224,18 @@ module.exports = {
                 },
               },
             ],
+          },
+          {
+            test: /\.less$/,
+            use: [
+              {loader: "style-loader"},
+              {loader: "css-loader"},
+              {loader: "less-loader",
+                options: {
+                  modifyVars: themeVariables
+                }
+              }
+            ]
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
