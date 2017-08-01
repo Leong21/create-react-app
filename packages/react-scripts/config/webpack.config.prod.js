@@ -23,6 +23,10 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
+const lessToJs = require('less-vars-to-js');
+const fs = require('fs');
+const themeVariables = lessToJs(fs.readFileSync(path.resolve('./src/bhp-antd-theme.less'), 'utf8'));
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
@@ -176,6 +180,9 @@ module.exports = {
               // @remove-on-eject-begin
               babelrc: false,
               presets: [require.resolve('babel-preset-react-app')],
+              plugins: [
+                ['import', [{ libraryName: 'antd', style: true }]],
+              ],
               // @remove-on-eject-end
               compact: true,
             },
@@ -234,6 +241,20 @@ module.exports = {
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
           },
+          ,
+          {
+            test: /\.less$/,
+            use: [
+              {loader: "style-loader"},
+              {loader: "css-loader"},
+              {loader: "less-loader",
+                options: {
+                  modifyVars: themeVariables
+                }
+              }
+            ]
+          },
+
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
           // This loader don't uses a "test" so it will catch all modules

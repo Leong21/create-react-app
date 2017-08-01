@@ -24,7 +24,7 @@ const paths = require('./paths');
 const lessToJs = require('less-vars-to-js');
 const fs = require('fs');
 const themeVariables = lessToJs(fs.readFileSync(path.resolve('./src/bhp-antd-theme.less'), 'utf8'));
-console.log(themeVariables);
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
